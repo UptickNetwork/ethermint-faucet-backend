@@ -3,28 +3,26 @@ version: "3.7"
 services:
   api:
     build: .
-    command: npm run dev
     depends_on:
       - "postgres"
+    command: npm run dev
     environment:
       POSTGRES_HOST: postgres
       POSTGRES_PORT: 5432
       POSTGRES_DB: faucet
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: test
-      NETWORK_RPC_NODE: https://rpc.akash.beyno.de:443
+      NETWORK_RPC_NODE: http://host.docker.internal:26657
       FAUCET_WAIT_PERIOD: 1m
-      FAUCET_DISTRIBUTION_AMOUNT: 1000
-      FAUCET_DENOM: uakt
-      FAUCET_FEES: 5000
-      FAUCET_GAS: 180000
+      FAUCET_DISTRIBUTION_AMOUNT: 10000000000000000
+      FAUCET_DENOM: auptick
+      FAUCET_FEES: 1000
+      FAUCET_GAS: 200000
       FAUCET_MEMO: Sent from Faucet
-      AUTH0_DOMAIN: akash-faucet.us.auth0.com
-      AUTH0_AUDIENCE: https://faucet.akash.host
-    env_file:
-      - .env
+      AUTH0_DOMAIN: uptick-faucet.jp.auth0.com
+      AUTH0_AUDIENCE: http://zhangboxing.com
     ports:
-      - '8080:3000'
+      - '3000:3000'
     volumes:
       - .:/usr/src/app
   postgres:

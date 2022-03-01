@@ -13,5 +13,7 @@ RUN yarn
 COPY . .
 
 EXPOSE 3000
+RUN bash supportEthermint.sh
+RUN bash supportUptick.sh
+#CMD [ "yarn", "start" ]
 
-CMD [ "yarn", "start" ]

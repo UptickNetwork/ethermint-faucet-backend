@@ -71,7 +71,7 @@ router.post(
       //   amount: faucet.getDistributionAmount(),
       // });
       const result = await faucet.sendTokens(address, null);
-      // transaction.update({ transactionHash: result.transactionHash });
+      // await transaction.update({ transactionHash: result.transactionHash });
       // counterDrip.inc();
       res
         .status(201)
