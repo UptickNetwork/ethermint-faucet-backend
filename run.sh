@@ -1,3 +1,4 @@
+export HOST='0.0.0.0'
 export POSTGRES_HOST=localhost
 export POSTGRES_PORT=5432
 export POSTGRES_DB=faucet
@@ -19,6 +20,6 @@ export FAUCET_MNEMONIC="lawn ability tribe story plate offer you sell arrange ki
 bash supportEthermint.sh
 bash supportUptick.sh
 docker-compose  -f db-compose.yml up -d
-#yarn migrate
+yarn migrate
 yarn start
 #
