@@ -14,8 +14,7 @@ export FAUCET_MEMO="send amount"
 export ADDRESS_PREFIX="uptick"
 export AUTH0_DOMAIN="uptick-faucet.jp.auth0.com";
 export AUTH0_AUDIENCE="http://zhangboxing.com";
-#export FAUCET_MNEMONIC="visual trend scene cake abstract farm fee orchard child deposit power mean capable chalk enough orange make vendor direct enlist pill dragon early autumn"
-export FAUCET_MNEMONIC="lawn ability tribe story plate offer you sell arrange kid pledge grab pizza liquid tone combine box quantum example peasant urban promote drift infant"
+export FAUCET_MNEMONIC="visual trend scene cake abstract farm fee orchard child deposit power mean capable chalk enough orange make vendor direct enlist pill dragon early autumn"
 
 bash supportEthermint.sh
 bash supportUptick.sh
