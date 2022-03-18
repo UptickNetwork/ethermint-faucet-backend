@@ -49,7 +49,6 @@ export const sendTokens = async (recipient: any, amount: any) => {
     wallet
   );
   if (!amount) amount = getDistributionAmount();
-
   const sendMsg = {
     typeUrl: "/cosmos.bank.v1beta1.MsgSend",
     value: {

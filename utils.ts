@@ -62,7 +62,7 @@ export async function userLimit(req: any, res: any, next: any) {
     });
     if (blocked) {
       counterBlockedAddress.inc();
-      return res.status(403).send(JSON.stringify({ error: "The user has already collected it, please come back " + FAUCET_WAIT_PERIOD + "later" }));
+      return res.status(403).send(JSON.stringify({ error: "The user has already collected it, please come back " + FAUCET_WAIT_PERIOD + " later" }));
     }
   }
   next();
@@ -85,7 +85,7 @@ export async function blockedAddresses(req: any, res: any, next: any) {
     });
     if (blocked) {
       counterBlockedAddress.inc();
-      return res.status(403).send(JSON.stringify({ error: "The address has already collected it, please come back " + FAUCET_WAIT_PERIOD + "later" }));
+      return res.status(403).send(JSON.stringify({ error: "The address has already collected it, please come back " + FAUCET_WAIT_PERIOD + " later" }));
     }
   }
   next();
