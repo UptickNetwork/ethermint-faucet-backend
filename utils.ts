@@ -1,8 +1,9 @@
 import jwtAuthz from "express-jwt-authz";
 import { Sequelize, DataTypes, Op } from "sequelize";
-import { BlockedAddress, latestTransactionSince,UserRecord } from "./database";
+import { BlockedAddress, latestTransactionSince, UserRecord } from "./database";
 import * as faucet from "./faucet";
 import client from "prom-client";
+const FAUCET_WAIT_PERIOD = process.env.FAUCET_WAIT_PERIOD || "24h";
 
 const counterBlockedAddress = new client.Counter({
   name: "faucet_blocked_address_count",
@@ -48,7 +49,7 @@ export async function userLimit(req: any, res: any, next: any) {
   let { userName } = req.body;
   if (userName) {
     let cooldownDate = new Date(
-        (new Date() as any) - (faucet as any).getWaitPeriod()
+      (new Date() as any) - (faucet as any).getWaitPeriod()
     );
     let blocked = await UserRecord.findOne({
       where: {
@@ -61,7 +62,7 @@ export async function userLimit(req: any, res: any, next: any) {
     });
     if (blocked) {
       counterBlockedAddress.inc();
-      return res.status(403).send(JSON.stringify({ error: "Blocked user" }));
+      return res.status(403).send(JSON.stringify({ error: "The user has already collected it, please come back " + FAUCET_WAIT_PERIOD + "later" }));
     }
   }
   next();
@@ -71,7 +72,7 @@ export async function blockedAddresses(req: any, res: any, next: any) {
   const { address } = req.body;
   if (address) {
     let cooldownDate = new Date(
-        (new Date() as any) - (faucet as any).getWaitPeriod()
+      (new Date() as any) - (faucet as any).getWaitPeriod()
     );
     let blocked = await BlockedAddress.findOne({
       where: {
@@ -84,7 +85,7 @@ export async function blockedAddresses(req: any, res: any, next: any) {
     });
     if (blocked) {
       counterBlockedAddress.inc();
-      return res.status(403).send(JSON.stringify({ error: "Blocked address" }));
+      return res.status(403).send(JSON.stringify({ error: "The address has already collected it, please come back " + FAUCET_WAIT_PERIOD + "later" }));
     }
   }
   next();
