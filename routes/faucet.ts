@@ -36,7 +36,6 @@ router.post(
     async (req: any, res: any, next: any) => {
         let {address, userName} = req.body;
         let addressHex = address
-        console.log("addressHex:", addressHex)
         try {
             if (address.length < 2) return invalidAddress(res);
             // Hex encoded address

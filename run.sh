@@ -14,7 +14,7 @@ export FAUCET_MEMO="send amount"
 export ADDRESS_PREFIX="uptick"
 export AUTH0_DOMAIN="uptick-faucet.jp.auth0.com";
 export AUTH0_AUDIENCE="http://zhangboxing.com";
-export FAUCET_MNEMONIC=""
+export FAUCET_MNEMONIC="coffee aspect maid cube excuse lounge ghost verb picnic super chef middle time beef spawn blood energy prize suit code two prosper phrase traffic"
 
 if [ ! -d "./logs" ]; then
   mkdir logs
@@ -24,4 +24,5 @@ bash supportEthermint.sh
 bash supportUptick.sh
 docker-compose  -f db-compose.yml up -d
 yarn migrate
-nohup yarn start > ./logs/faucet.log 2>&1 &
+yarn start
+# nohup yarn start > ./logs/faucet.log 2>&1 &
