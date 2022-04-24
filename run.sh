@@ -24,5 +24,4 @@ bash supportEthermint.sh
 bash supportUptick.sh
 docker-compose  -f db-compose.yml up -d
 yarn migrate
-yarn start
-# nohup yarn start > ./logs/faucet.log 2>&1 &
+nohup yarn start > ./logs/faucet.log 2>&1 &
