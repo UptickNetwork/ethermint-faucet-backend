@@ -14,7 +14,7 @@ export FAUCET_MEMO="send amount"
 export ADDRESS_PREFIX="uptick"
 export AUTH0_DOMAIN="uptick-faucet.jp.auth0.com";
 export AUTH0_AUDIENCE="http://zhangboxing.com";
-export FAUCET_MNEMONIC="coffee aspect maid cube excuse lounge ghost verb picnic super chef middle time beef spawn blood energy prize suit code two prosper phrase traffic"
+export FAUCET_MNEMONIC=""
 
 if [ ! -d "./logs" ]; then
   mkdir logs
