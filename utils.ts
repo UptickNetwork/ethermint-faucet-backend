@@ -1,7 +1,13 @@
 import jwtAuthz from "express-jwt-authz";
-import { BlockedAddress, latestTransactionSince } from "./database";
+import { Sequelize, DataTypes, Op } from "sequelize";
+import { BlockedAddress, latestTransactionSince, UserRecord } from "./database";
 import * as faucet from "./faucet";
 import client from "prom-client";
+import { ethToEthermint, ethermintToEth } from "@hanchon/ethermint-address-converter";
+
+const ADDRESS_PREFIX = process.env.ADDRESS_PREFIX || "uptick";
+
+const FAUCET_WAIT_PERIOD = process.env.FAUCET_WAIT_PERIOD || "24h";
 
 const counterBlockedAddress = new client.Counter({
   name: "faucet_blocked_address_count",
@@ -30,28 +36,81 @@ export async function ensureAuthenticated(req: any, res: any, next: any) {
 }
 
 export async function rateLimit(req: any, res: any, next: any) {
-  if (req.user.id) {
+  // if (req.user.id) {
+  //   let cooldownDate = new Date(
+  //     (new Date() as any) - (faucet as any).getWaitPeriod()
+  //   );
+  //   let transaction = await latestTransactionSince(req.user, cooldownDate);
+  //   if (transaction) {
+  //     counterCooldown.inc();
+  //     return res.status(403).send(JSON.stringify({ error: "Cooldown" }));
+  //   }
+  // }
+  next();
+}
+
+export async function userLimit(req: any, res: any, next: any) {
+  let { userName } = req.body;
+  if (userName) {
     let cooldownDate = new Date(
       (new Date() as any) - (faucet as any).getWaitPeriod()
     );
-    let transaction = await latestTransactionSince(req.user, cooldownDate);
-    if (transaction) {
-      counterCooldown.inc();
-      return res.status(403).send(JSON.stringify({ error: "Cooldown" }));
+    let blocked = await UserRecord.findOne({
+      where: {
+        userName: userName.trim(),
+        createdAt: {
+          [Op.gt]: cooldownDate,
+        },
+      },
+      order: [["createdAt", "DESC"]],
+    });
+    if (blocked) {
+      counterBlockedAddress.inc();
+      return res.status(403).send(JSON.stringify({ error: "The user has already collected it, please come back " + FAUCET_WAIT_PERIOD + " later" }));
     }
   }
   next();
 }
 
+function invalidAddress(res: any) {
+  res.status(422).send(JSON.stringify({ error: "invalid address" }));
+}
+
 export async function blockedAddresses(req: any, res: any, next: any) {
-  const { address } = req.body;
+  var { address } = req.body;
+  var addressHex;
+  try {
+    if (address.length < 2) return invalidAddress(res);
+    // Hex encoded address
+    if (address[0] === "0" && address[1] === "x") {
+      if (ethermintToEth(ethToEthermint(address)) !== address) return invalidAddress(res);
+      addressHex = address
+    } else {
+      addressHex = ethermintToEth(address)
+      // Ethermint address
+      if (!address.includes(ADDRESS_PREFIX)) return invalidAddress(res);
+      if (ethToEthermint(ethermintToEth(address)) !== address) return invalidAddress(res);
+    }
+  } catch (error) {
+    return invalidAddress(res)
+  }
+
   if (address) {
+    let cooldownDate = new Date(
+      (new Date() as any) - (faucet as any).getWaitPeriod()
+    );
     let blocked = await BlockedAddress.findOne({
-      where: { address: address.trim() },
+      where: {
+        address: addressHex.trim(),
+        createdAt: {
+          [Op.gt]: cooldownDate,
+        },
+      },
+      order: [["createdAt", "DESC"]],
     });
     if (blocked) {
       counterBlockedAddress.inc();
-      return res.status(403).send(JSON.stringify({ error: "Blocked address" }));
+      return res.status(403).send(JSON.stringify({ error: "The address has already collected it, please come back " + FAUCET_WAIT_PERIOD + " later" }));
     }
   }
   next();

@@ -1,0 +1,15 @@
+version: "3.7"
+
+services:
+  postgres:
+    image: postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: test
+      POSTGRES_DB: faucet
+    ports:
+      - '5432:5432'
+    volumes:
+      - faucet-db:/var/lib/postgresql/data
+volumes:
+  faucet-db:

@@ -53,8 +53,26 @@ export const BlockedAddress = sequelize.define("blockedAddress", {
   address: {
     type: DataTypes.STRING,
     allowNull: false,
-    unique: true,
+    unique: false,
   },
+  // lastTime: {
+  //   type: DataTypes.TIME,
+  //   allowNull: false,
+  //   unique: false,
+  // },
+});
+
+export const UserRecord = sequelize.define("userRecord", {
+  userName: {
+    type: DataTypes.STRING,
+    allowNull: false,
+    unique: false,
+  },
+  // lastTime: {
+  //   type: DataTypes.TIME,
+  //   allowNull: false,
+  //   unique: false,
+  // },
 });
 
 export const latestTransactionSince = async (user: any, date: any) => {
@@ -72,11 +90,11 @@ export const latestTransactionSince = async (user: any, date: any) => {
   });
 };
 
-Transaction.belongsTo(User, {
-  foreignKey: { allowNull: false },
-  onDelete: "CASCADE",
-});
-User.hasMany(Transaction, {
-  foreignKey: { allowNull: false },
-  onDelete: "CASCADE",
-});
+// Transaction.belongsTo(User, {
+//   foreignKey: { allowNull: false },
+//   onDelete: "CASCADE",
+// });
+// User.hasMany(Transaction, {
+//   foreignKey: { allowNull: false },
+//   onDelete: "CASCADE",
+// });
