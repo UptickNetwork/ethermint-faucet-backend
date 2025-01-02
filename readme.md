@@ -154,3 +154,4 @@ Create a blocked addresses. Requires an access token with the `manage:faucet` pe
 ### `DELETE /blocked-addresses/{id}`
 
 Delete a blocked address.
+
